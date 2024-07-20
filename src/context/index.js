@@ -7,6 +7,9 @@ function AppContextProvider({children}) {
   const [currUser, setcurrUser] = useState('');
   const [currUserName, setcurrUserName] = useState('');
   const [allUser, setallUser] = useState([]);
+  const [allChatRooms, setallChatRooms] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [currGroupName, setcurrGroupName] = useState('');
 
   const contextValue = {
     showLogin: showLogin,
@@ -17,6 +20,12 @@ function AppContextProvider({children}) {
     setcurrUserName,
     allUser: allUser,
     setallUser,
+    allChatRooms: allChatRooms,
+    setallChatRooms,
+    modalVisible: modalVisible,
+    setModalVisible,
+    currGroupName: currGroupName,
+    setcurrGroupName,
   };
 
   return (
