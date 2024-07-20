@@ -53,7 +53,7 @@ const HomeScreen = ({navigation}) => {
 
   useEffect(() => {
     if (currUser.trim() !== '') {
-      navigation.navigate('Chat');
+      navigation.navigate('Register');
     }
   }, [currUser]);
 
