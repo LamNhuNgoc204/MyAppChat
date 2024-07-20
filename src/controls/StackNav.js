@@ -3,15 +3,15 @@ import HomeScreen from '../screens/home/HomeScreen';
 import ChatScreen from '../screens/chats/ChatScreen';
 import MessageScreen from '../screens/message/MessageScreen';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import LoginScreen from '../screens/login/LoginScreen';
 import Register from '../screens/logup/Register';
+import LoginScreen from '../screens/login/LoginScreen';
 
 const StackNav = () => {
   const Stack = createNativeStackNavigator();
 
   return (
     <Stack.Navigator
-      initialRouteName="LoginScreen"
+      initialRouteName="Register"
       screenOptions={{headerShown: false}}>
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="LoginScreen" component={LoginScreen} />
