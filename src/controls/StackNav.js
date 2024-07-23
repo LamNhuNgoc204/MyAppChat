@@ -1,23 +1,43 @@
 import React from 'react';
-import HomeScreen from '../screens/home/HomeScreen';
 import ChatScreen from '../screens/chats/ChatScreen';
 import MessageScreen from '../screens/message/MessageScreen';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Register from '../screens/logup/Register';
 import LoginScreen from '../screens/login/LoginScreen';
+import HomeScreen from '../screens/home/HomeScreen';
+import OnBoard from '../screens/board/OnBoard';
 
 const StackNav = () => {
   const Stack = createNativeStackNavigator();
 
   return (
-    <Stack.Navigator
-      initialRouteName="Register"
-      screenOptions={{headerShown: false}}>
+    <Stack.Navigator initialRouteName="LoginScreen">
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="OnBoard"
+        component={OnBoard}
+      />
       <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="LoginScreen" component={LoginScreen} />
-      <Stack.Screen name="Register" component={Register} />
-      <Stack.Screen name="Chat" component={ChatScreen} />
-      <Stack.Screen name="Message" component={MessageScreen} />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="LoginScreen"
+        component={LoginScreen}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="Register"
+        component={Register}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="Chat"
+        component={ChatScreen}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="Message"
+        component={MessageScreen}
+      />
     </Stack.Navigator>
   );
 };

@@ -1,114 +1,74 @@
-import {
-  View,
-  Text,
-  Image,
-  TextInput,
-  Pressable,
-  Alert,
-  Keyboard,
-} from 'react-native';
-import React, {useContext, useEffect} from 'react';
+import {View, Text, Image, FlatList} from 'react-native';
+import React, {useContext, useEffect, useLayoutEffect, useState} from 'react';
 import appst from '../../constants/AppStyle';
 import homest from './style';
 import {AppContext} from '../../context';
-import Button from '../../components/Button';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {jwtDecode} from 'jwt-decode';
+import axios from 'axios';
+import HomeItem from '../../items/Home/HomeItem';
 
 const HomeScreen = ({navigation}) => {
-  const {
-    showLogin,
-    setshowLogin,
-    currUser,
-    setcurrUser,
-    currUserName,
-    setcurrUserName,
-    allUser,
-    setallUser,
-  } = useContext(AppContext);
+  const {userId, setuserId} = useContext(AppContext);
+  const [lstUser, setlstUser] = useState([]);
 
-  const handle = isLogin => {
-    if (currUserName.trim() !== '') {
-      const index = allUser.findIndex(item => item === currUserName);
-
-      if (isLogin) {
-        if (index === -1) {
-          Alert.alert('Register first');
-        } else {
-          setcurrUser(currUserName);
-        }
-      } else {
-        if (index === -1) {
-          allUser.push(allUser);
-          setcurrUser(currUserName);
-        } else {
-          Alert.alert('Login now');
-        }
-      }
-      setcurrUserName('');
-    } else {
-      Alert.alert('User is not empty');
-    }
-
-    Keyboard.dismiss();
-  };
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: '',
+      headerLeft: () => <Text style={homest.titleLeft}>Swift Chat</Text>,
+      headerRight: () => (
+        <View style={appst.rowCenter}>
+          <Image
+            source={require('../../assets/icons/chat.png')}
+            style={[appst.icon24, {marginRight: 10}]}
+          />
+          <Image
+            source={require('../../assets/icons/people.png')}
+            style={appst.icon24}
+          />
+        </View>
+      ),
+    });
+  }, [navigation]);
 
   useEffect(() => {
-    if (currUser.trim() !== '') {
-      navigation.navigate('Register');
-    }
-  }, [currUser]);
+    const fetchUsers = async () => {
+      const token = await AsyncStorage.getItem('authToken');
+      const decodedToken = jwtDecode(token);
+      const userId = decodedToken.userId;
+      setuserId(userId);
 
-  // console.log(allUser);
+      axios
+        .get(`http://192.168.1.68:4000/user/users/${userId}`)
+        .then(response => {
+          console.log("RP =======>",response)
+          const {data} = response.data;
+          // console.log('Response data:', data);
+
+          if (data && Array.isArray(data)) {
+            setlstUser(data);
+          } else {
+            console.log('Data is not an array or is empty:', data);
+          }
+        })
+        .catch(error => {
+          console.log('Error => ', error);
+        });
+    };
+
+    fetchUsers();
+  }, []);
+
+  // console.log('users  ---> ', lstUser);
 
   return (
-    <View style={[appst.container, appst.center, homest.container]}>
-      <View />
-      <View />
-      <Image
-        style={homest.bgImg}
-        source={{
-          uri: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/96/d5/a8/96d5a8b1-6165-5093-5dd7-f476127297e4/AppIcon-0-0-1x_U007emarketing-0-7-0-85-220.png/1200x600wa.png',
-        }}
+    <View style={[appst.container, homest.container]}>
+      <FlatList
+        data={lstUser}
+        renderItem={({item}) => <HomeItem item={item} />}
+        extraData={lstUser}
+        keyExtractor={(item) => item._id}
       />
-      <View style={homest.view1}>
-        {showLogin ? (
-          <View>
-            <View>
-              <Text style={homest.heading}>Enter Your User Name</Text>
-              <TextInput
-                autoCorrect={false}
-                placeholder="Enter your user name"
-                style={homest.input}
-                onChangeText={e => setcurrUserName(e)}
-                value={currUserName}
-              />
-            </View>
-            <View style={[homest.viewPress, appst.rowSb]}>
-              <Button
-                content={'Register'}
-                width={'45%'}
-                onPress={() => handle(false)}
-              />
-              <Button
-                content={'Login'}
-                width={'45%'}
-                onPress={() => handle(true)}
-              />
-            </View>
-          </View>
-        ) : (
-          <View style={[homest.info, appst.center]}>
-            <Text style={homest.textHead}>Connect, Grow and Inspite</Text>
-            <Text style={homest.subTitle}>
-              Connect people around here for free
-            </Text>
-            <Button
-              content={'Get Started'}
-              width={'100%'}
-              onPress={() => setshowLogin(true)}
-            />
-          </View>
-        )}
-      </View>
     </View>
   );
 };

@@ -11,6 +11,8 @@ function AppContextProvider({children}) {
   const [modalVisible, setModalVisible] = useState(false);
   const [currGroupName, setcurrGroupName] = useState('');
 
+  const [userId, setuserId] = useState('')
+
   const contextValue = {
     showLogin: showLogin,
     setshowLogin,
@@ -26,6 +28,8 @@ function AppContextProvider({children}) {
     setModalVisible,
     currGroupName: currGroupName,
     setcurrGroupName,
+    userId: userId, 
+    setuserId
   };
 
   return (

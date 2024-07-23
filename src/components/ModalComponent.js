@@ -9,7 +9,7 @@ import {
   Keyboard,
 } from 'react-native';
 import {AppContext} from '../context';
-import homest from '../screens/home/style';
+import homest from '../screens/board/style';
 import appst from '../constants/AppStyle';
 import Button from '../components/Button';
 import {socket} from '../utils';

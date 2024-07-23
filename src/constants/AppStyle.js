@@ -20,6 +20,10 @@ const appst = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  icon24:{
+    width: 24,
+    height: 24
+  }
 });
 
 export default appst;
