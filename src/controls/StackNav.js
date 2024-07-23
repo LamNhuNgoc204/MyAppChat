@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Children } from 'react';
 import ChatScreen from '../screens/chats/ChatScreen';
 import MessageScreen from '../screens/message/MessageScreen';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -6,6 +6,7 @@ import Register from '../screens/logup/Register';
 import LoginScreen from '../screens/login/LoginScreen';
 import HomeScreen from '../screens/home/HomeScreen';
 import OnBoard from '../screens/board/OnBoard';
+import FriendsScreen from '../screens/Friends/FriendsScreen';
 
 const StackNav = () => {
   const Stack = createNativeStackNavigator();
@@ -37,6 +38,10 @@ const StackNav = () => {
         options={{headerShown: false}}
         name="Message"
         component={MessageScreen}
+      />
+      <Stack.Screen
+        name="Friends"
+        component={FriendsScreen}
       />
     </Stack.Navigator>
   );

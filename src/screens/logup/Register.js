@@ -4,7 +4,7 @@ import appst from '../../constants/AppStyle';
 import loginst from '../login/style';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
-import axios from 'axios';
+import AxiosInstance from '../../helper/AxiosInstance';
 
 const Register = ({navigation}) => {
   const [name, setname] = useState('ngoc');
@@ -14,7 +14,7 @@ const Register = ({navigation}) => {
     'https://s.pinimg.com/webapp/center-2d76a691.png',
   );
 
-  const register = () => {
+  const register = async() => {
     const body = {
       name: name,
       email: email,
@@ -22,8 +22,8 @@ const Register = ({navigation}) => {
       image: image,
     };
 
-    axios
-      .post('http://192.168.1.68:4000/user/register', body)
+    await AxiosInstance()
+      .post('/register', body)
       .then(response => {
         console.log(response);
         Alert.alert(

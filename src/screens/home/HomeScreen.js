@@ -1,4 +1,4 @@
-import {View, Text, Image, FlatList} from 'react-native';
+import {View, Text, Image, FlatList, TouchableOpacity} from 'react-native';
 import React, {useContext, useEffect, useLayoutEffect, useState} from 'react';
 import appst from '../../constants/AppStyle';
 import homest from './style';
@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {jwtDecode} from 'jwt-decode';
 import axios from 'axios';
 import HomeItem from '../../items/Home/HomeItem';
+import AxiosInstance from '../../helper/AxiosInstance';
 
 const HomeScreen = ({navigation}) => {
   const {userId, setuserId} = useContext(AppContext);
@@ -18,14 +19,22 @@ const HomeScreen = ({navigation}) => {
       headerLeft: () => <Text style={homest.titleLeft}>Swift Chat</Text>,
       headerRight: () => (
         <View style={appst.rowCenter}>
-          <Image
-            source={require('../../assets/icons/chat.png')}
-            style={[appst.icon24, {marginRight: 10}]}
-          />
-          <Image
-            source={require('../../assets/icons/people.png')}
-            style={appst.icon24}
-          />
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Message')}
+            style={{marginRight: 10}}>
+            <Image
+              source={require('../../assets/icons/chat.png')}
+              style={[appst.icon24]}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Friends')}
+            style={{marginRight: 10}}>
+            <Image
+              source={require('../../assets/icons/people.png')}
+              style={appst.icon24}
+            />
+          </TouchableOpacity>
         </View>
       ),
     });
@@ -38,11 +47,11 @@ const HomeScreen = ({navigation}) => {
       const userId = decodedToken.userId;
       setuserId(userId);
 
-      axios
-        .get(`http://192.168.1.68:4000/user/users/${userId}`)
+      await AxiosInstance()
+        .get(`/users/${userId}`)
         .then(response => {
-          console.log("RP =======>",response)
-          const {data} = response.data;
+          console.log('RP =======>', response);
+          const data = response.data;
           // console.log('Response data:', data);
 
           if (data && Array.isArray(data)) {
@@ -67,7 +76,7 @@ const HomeScreen = ({navigation}) => {
         data={lstUser}
         renderItem={({item}) => <HomeItem item={item} />}
         extraData={lstUser}
-        keyExtractor={(item) => item._id}
+        keyExtractor={item => item._id}
       />
     </View>
   );
